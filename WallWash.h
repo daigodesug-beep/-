@@ -16,7 +16,7 @@ private:
 
     int width, height;
 
-    // š’Ç‰Á
+    // ’Ç‰Á
     int cleanPower;   // í‚Á‚½—Ê
     int maxPower;     // Å‘å’l
 };

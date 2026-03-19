@@ -8,24 +8,23 @@ void WallWash::Init()
     GetGraphSize(cleanImg, &width, &height);
 
     maskImg = MakeScreen(width, height, TRUE);
+    CreateMaskScreen();
+    SetMaskScreenGraph(maskImg);
 
-    SetDrawScreen(maskImg);
-    DrawBox(0, 0, width, height, GetColor(255, 255, 255), TRUE);
-    SetDrawScreen(DX_SCREEN_BACK);
-
-    // ★進行度初期化
+    // 進行度初期化
     cleanPower = 0;
     maxPower = width * height;
 }
 
 void WallWash::Update()
 {
+
     int mx, my;
     GetMousePoint(&mx, &my);
-
+    SetDrawScreen(maskImg);
+    SetDrawBlendMode(DX_BLENDMODE_SRCCOLOR, 255);
     if (GetMouseInput() & MOUSE_INPUT_LEFT)
     {
-        SetDrawScreen(maskImg);
 
         for (int i = 0; i < 30; i++)
         {
@@ -34,13 +33,12 @@ void WallWash::Update()
 
             DrawCircle(rx, ry, 10, GetColor(0, 0, 0), TRUE);
 
-            // ★削った量を加算（適当でOK）
-            cleanPower += 200;
+            // 削った量を加算
+            cleanPower += 20;
         }
-
-        SetDrawScreen(DX_SCREEN_BACK);
     }
 
+    SetDrawScreen(DX_SCREEN_BACK);
     // 上限制限
     if (cleanPower > maxPower) cleanPower = maxPower;
 }
@@ -48,11 +46,10 @@ void WallWash::Update()
 void WallWash::Draw()
 {
     DrawGraph(0, 0, cleanImg, TRUE);
-    DrawGraph(0, 0, dirtyImg, FALSE);
+    SetUseMaskScreenFlag(TRUE);
 
-    SetDrawBlendMode(DX_BLENDMODE_MULA, 255);
-    DrawGraph(0, 0, maskImg, TRUE);
-    SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+    DrawGraph(0, 0, dirtyImg, TRUE);
+    SetUseMaskScreenFlag(FALSE);
 }
 
 float WallWash::GetCleanPercent()
