@@ -15,6 +15,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         game.Update();
         game.Draw();
     }
+    PlaySoundFile("Resource/BGM.mp3", DX_PLAYTYPE_LOOP);
 
     DxLib_End();
     return 0;
